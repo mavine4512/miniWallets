@@ -67,3 +67,39 @@ For production:
 3. Run migrations: `npm run migration:run`
 4. Use a strong JWT_SECRET (at least 32 random characters)
 5. Set `NODE_ENV=production`
+
+## Users Table
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+## Wallets Table
+```sql
+CREATE TABLE wallets (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  balance DECIMAL(10,2) DEFAULT 0 CHECK (balance >= 0),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Transactions Table
+
+```sql
+CREATE TABLE transactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  wallet_id UUID REFERENCES wallets(id),
+  type VARCHAR(20) CHECK (type IN ('DEPOSIT', 'TRANSFER', 'WITHDRAWAL')),
+  amount DECIMAL(10,2) CHECK (amount > 0),
+  description TEXT,
+  status VARCHAR(20) CHECK (status IN ('PENDING', 'SUCCESS', 'FAILED')),
+  recipient_wallet_id UUID REFERENCES wallets(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
