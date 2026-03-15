@@ -2,6 +2,7 @@
 
 import { useAuthContext } from './context/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { LogOut, Settings } from 'lucide-react';
 
@@ -34,14 +35,16 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-muted-foreground hover:text-white"
-              title="Settings"
-            >
-              <Settings className="w-5 h-5" />
-            </Button>
+             <Link href="/profile">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-white"
+                title="Profile Settings"
+              >
+                <Settings className="w-5 h-5" />
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               size="icon"
