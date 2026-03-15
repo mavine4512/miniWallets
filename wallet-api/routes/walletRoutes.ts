@@ -36,5 +36,11 @@ router.post('/:walletId/deposit', authMiddleware, validateRequest(DepositSchema)
   walletController.deposit(req, res).catch(next);
 });
 
+// This includes /transactions and /deposit routes
+router.get('/:walletId/transactions', authMiddleware, (req, res, next) => {
+  walletController.getWalletTransactions(req, res).catch(next);
+});
+
+
 export default router;
 
